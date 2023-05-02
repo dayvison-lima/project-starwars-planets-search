@@ -1,28 +1,23 @@
-import { useEffect, useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import PlanetContext from '../context/PlanetContext';
 
 function FetchPlanetsApi() {
-  const { setListPlanets, setTable } = useContext(PlanetContext);
-
+  const { setListPlanets } = useContext(PlanetContext);
   useEffect(() => {
-    const getPlanets = async () => {
-      try {
-        const url = 'https://swapi-trybe.herokuapp.com/api/planets/';
-        const response = await fetch(url);
-        const { results } = await response.json();
-        if (results.length !== 0 || !results) {
-          setListPlanets(results);
-          setTable(Object.keys(results[0]));
-        }
-      } catch (error) {
-        console.log(error);
-      }
+    const fetchPlanets = async () => {
+      const response = await fetch('https://swapi.dev/api/planets');
+      const data = await response.json();
+      const { results } = data;
+      const planetasFiltrados = results.map((planeta) => {
+        const { residents, ...planetData } = planeta;
+        return planetData;
+      });
+      setListPlanets(planetasFiltrados);
+
+      return planetasFiltrados;
     };
-    getPlanets();
-  }, [setListPlanets, setTable]);
-  return (
-    null
-  );
+    fetchPlanets();
+  }, [setListPlanets]);
 }
 
 export default FetchPlanetsApi;

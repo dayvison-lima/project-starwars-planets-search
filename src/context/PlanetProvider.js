@@ -4,21 +4,18 @@ import PlanetContext from './PlanetContext';
 
 function PlanetProvider({ children }) {
   const [listPlanets, setListPlanets] = useState([]);
-  const [table, setTable] = useState([]);
   const [nameFilter, setNameFilter] = useState([]);
-  const [numberFilter, setNumberFilter] = useState([]);
+  const [filteredPlanets, setFilteredPlanets] = useState([]);
 
   return (
     <PlanetContext.Provider
       value={ {
         listPlanets,
         setListPlanets,
-        table,
-        setTable,
         nameFilter,
         setNameFilter,
-        numberFilter,
-        setNumberFilter,
+        filteredPlanets,
+        setFilteredPlanets,
       } }
     >
       {children}
