@@ -9,9 +9,12 @@ function HeaderTable() {
     return (
       <tr>
         {
-          columns.map((col) => (<th key={ col }>
-            {col}
-          </th>))
+          columns.map((col) => (
+            <th
+              key={ col }
+            >
+              {col}
+            </th>))
         }
       </tr>
     );
