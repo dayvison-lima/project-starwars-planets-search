@@ -1,14 +1,14 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import PlanetContext from '../context/PlanetContext';
 import FetchPlanetsApi from '../services/FetchPlanetsApi';
+import FiltersInput from './FiltersInput';
 
 function Table() {
   const {
     listPlanets,
     nameFilter,
     setNameFilter,
-    filteredPlanets,
-    setFilteredPlanets,
+    filtersNumericValues,
   } = useContext(PlanetContext);
 
   function handleNameSearch({ target }) {
@@ -16,14 +16,44 @@ function Table() {
     setNameFilter(value);
   }
 
-  useEffect(() => {
-    const planetasFiltrados = listPlanets
-      .filter((planeta) => planeta.name.toLowerCase().includes(nameFilter));
-    setFilteredPlanets(planetasFiltrados);
-  }, [listPlanets, nameFilter, filteredPlanets, setFilteredPlanets]);
+  const planetasFiltrados = listPlanets
+    .filter((planeta) => planeta.name.toLowerCase().includes(nameFilter));
+
+  const filterConcat = (array, column, comparison, value) => {
+    switch (comparison) {
+    case 'maior que':
+      return array.filter((planet) => planet[column] * 1 > value);
+    case 'menor que':
+      return array.filter((planet) => planet[column] * 1 < value);
+    case 'igual a':
+      return array.filter((planet) => planet[column] === value);
+    default:
+      return array;
+    }
+  };
+
+  const filtersCombined = (array, arrayFilter) => {
+    if (arrayFilter !== undefined && arrayFilter.length > 0) {
+      let currArray = array;
+      let newArray = [];
+
+      arrayFilter.forEach((filter) => {
+        const coluna = filter.column;
+        const match = filter.comparison;
+        const valor = filter.value;
+        newArray = filterConcat(currArray, coluna, match, valor);
+        currArray = newArray;
+      });
+      return newArray;
+    } return array;
+  };
+
+  const finalFilteredPlanets = filtersCombined(planetasFiltrados, filtersNumericValues);
+
   return (
     <>
       <FetchPlanetsApi />
+      <FiltersInput />
       <input
         type="text"
         value={ nameFilter }
@@ -50,7 +80,7 @@ function Table() {
           </tr>
         </thead>
         <tbody>
-          {filteredPlanets.map((planet) => (
+          {finalFilteredPlanets.map((planet) => (
             <tr key={ planet.name }>
               <td>{planet.name}</td>
               <td>{planet.climate}</td>
