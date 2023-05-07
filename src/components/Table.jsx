@@ -8,7 +8,6 @@ function Table() {
     listPlanets,
     nameFilter,
     setNameFilter,
-    filtersNumericValues,
   } = useContext(PlanetContext);
 
   function handleNameSearch({ target }) {
@@ -18,37 +17,6 @@ function Table() {
 
   const planetasFiltrados = listPlanets
     .filter((planeta) => planeta.name.toLowerCase().includes(nameFilter));
-
-  const filterConcat = (array, column, comparison, value) => {
-    switch (comparison) {
-    case 'maior que':
-      return array.filter((planet) => planet[column] * 1 > value);
-    case 'menor que':
-      return array.filter((planet) => planet[column] * 1 < value);
-    case 'igual a':
-      return array.filter((planet) => planet[column] === value);
-    default:
-      return array;
-    }
-  };
-
-  const filtersCombined = (array, arrayFilter) => {
-    if (arrayFilter !== undefined && arrayFilter.length > 0) {
-      let currArray = array;
-      let newArray = [];
-
-      arrayFilter.forEach((filter) => {
-        const coluna = filter.column;
-        const match = filter.comparison;
-        const valor = filter.value;
-        newArray = filterConcat(currArray, coluna, match, valor);
-        currArray = newArray;
-      });
-      return newArray;
-    } return array;
-  };
-
-  const finalFilteredPlanets = filtersCombined(planetasFiltrados, filtersNumericValues);
 
   return (
     <>
@@ -80,7 +48,7 @@ function Table() {
           </tr>
         </thead>
         <tbody>
-          {finalFilteredPlanets.map((planet) => (
+          {planetasFiltrados.map((planet) => (
             <tr key={ planet.name }>
               <td>{planet.name}</td>
               <td>{planet.climate}</td>

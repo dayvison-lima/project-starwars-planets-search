@@ -3,14 +3,14 @@ import PlanetContext from '../context/PlanetContext';
 
 function FiltersInput() {
   const {
-    filtersNumericValues,
-    setFiltersNumericValues,
+    listPlanets,
     columnFilter,
     setColumnFilter,
     comparisonFilter,
     setComparisonFilter,
     valueFilter,
     setValueFilter,
+    handleFiltros,
   } = useContext(PlanetContext);
 
   const options = [
@@ -33,7 +33,8 @@ function FiltersInput() {
     return setOptionMap;
   };
 
-  useEffect(() => {}, [filtersNumericValues]);
+  useEffect(() => {}, [listPlanets]);
+
   return (
     <div>
       <label htmlFor="column-filter">
@@ -59,10 +60,6 @@ function FiltersInput() {
           value={ comparisonFilter }
           onChange={ (event) => {
             setComparisonFilter(event.target.value);
-            setFiltersNumericValues({
-              ...filtersNumericValues,
-              comparison: comparisonFilter,
-            });
           } }
         >
           <option value="maior que">maior que</option>
@@ -85,13 +82,7 @@ function FiltersInput() {
       <button
         id="button-filter"
         data-testid="button-filter"
-        onClick={ () => (
-          setFiltersNumericValues([{
-            column: columnFilter,
-            comparison: comparisonFilter,
-            value: valueFilter,
-          }])
-        ) }
+        onClick={ handleFiltros }
       >
         Aplicar filtros
       </button>

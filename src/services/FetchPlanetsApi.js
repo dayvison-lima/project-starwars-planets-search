@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react';
 import PlanetContext from '../context/PlanetContext';
 
 function FetchPlanetsApi() {
-  const { setListPlanets } = useContext(PlanetContext);
+  const { setListPlanets, setApiData } = useContext(PlanetContext);
   useEffect(() => {
     const fetchPlanets = async () => {
       const response = await fetch('https://swapi.dev/api/planets');
@@ -13,11 +13,12 @@ function FetchPlanetsApi() {
         return planetData;
       });
       setListPlanets(planetasFiltrados);
+      setApiData(planetasFiltrados);
 
       return planetasFiltrados;
     };
     fetchPlanets();
-  }, [setListPlanets]);
+  }, [setListPlanets, setApiData]);
 }
 
 export default FetchPlanetsApi;
