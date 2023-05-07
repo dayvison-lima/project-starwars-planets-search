@@ -11,18 +11,13 @@ function FiltersInput() {
     valueFilter,
     setValueFilter,
     handleFiltros,
+    columnFilterOptions,
+    // setFiltros,
+    filtros,
   } = useContext(PlanetContext);
 
-  const options = [
-    'population',
-    'orbital_period',
-    'diameter',
-    'rotation_period',
-    'surface_water',
-  ];
-
   const setOptions = () => {
-    const setOptionMap = options.map((option) => (
+    const setOptionMap = columnFilterOptions.map((option) => (
       <option
         key={ option }
         value={ option }
@@ -33,7 +28,7 @@ function FiltersInput() {
     return setOptionMap;
   };
 
-  useEffect(() => {}, [listPlanets]);
+  useEffect(() => {}, [listPlanets, filtros]);
 
   return (
     <div>
