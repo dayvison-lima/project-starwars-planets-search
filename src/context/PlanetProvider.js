@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo } from 'react';
+import React, { useCallback, useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import PlanetContext from './PlanetContext';
 
@@ -21,9 +21,9 @@ function PlanetProvider({ children }) {
   const [filtros, setFiltros] = useState([]);
   const [atualizaFiltros, setAtualizaFiltros] = useState(false);
   const [columnFilterOptions, setColumnFilterOptions] = useState(options);
+  const [filterDeleted, setFilterDeleted] = useState(false);
 
   const handleFiltros = useCallback(() => {
-    console.log(filtros);
     if (comparisonFilter === 'maior que') {
       const filtrados = listPlanets
         .filter((planeta) => planeta[columnFilter] * 1 > valueFilter);
@@ -61,6 +61,40 @@ function PlanetProvider({ children }) {
     columnFilterOptions,
   ]);
 
+  const handleRemove = useCallback(() => {
+    setListPlanets(apiData);
+    setFiltros([]);
+  }, [apiData]);
+
+  const handleOneRemove = useCallback((col) => {
+    setFiltros((prevState) => prevState.filter((filter) => filter.columnFilter !== col));
+    setColumnFilterOptions((prevState) => [...prevState, col]);
+    setFilterDeleted(true);
+  }, []);
+
+  useEffect(() => {
+    if (filterDeleted) {
+      let filtrados = apiData;
+      filtros.forEach((filtro) => {
+        if (filtro.comparisonFilter.includes('maior que')) {
+          filtrados = filtrados
+            .filter((planeta) => Number(planeta[filtro.columnFilter])
+            > Number(filtro.valueFilter));
+        } if (filtro.comparisonFilter.includes('menor que')) {
+          filtrados = filtrados
+            .filter((planeta) => Number(planeta[filtro.columnFilter])
+            < Number(filtro.valueFilter));
+        } if (filtro.comparisonFilter.includes('igual a')) {
+          filtrados = filtrados
+            .filter((planeta) => Number(planeta[filtro.columnFilter])
+            === Number(filtro.valueFilter));
+        }
+      });
+      setListPlanets(filtrados);
+      setFilterDeleted(false);
+    }
+  }, [filtros, filterDeleted, apiData]);
+
   const values = useMemo(() => ({
     listPlanets,
     setListPlanets,
@@ -83,6 +117,10 @@ function PlanetProvider({ children }) {
     handleFiltros,
     columnFilterOptions,
     setColumnFilterOptions,
+    handleRemove,
+    handleOneRemove,
+    filterDeleted,
+    setFilterDeleted,
   }), [listPlanets,
     setListPlanets,
     apiData,
@@ -103,7 +141,12 @@ function PlanetProvider({ children }) {
     setAtualizaFiltros,
     handleFiltros,
     columnFilterOptions,
-    setColumnFilterOptions]);
+    setColumnFilterOptions,
+    handleRemove,
+    handleOneRemove,
+    filterDeleted,
+    setFilterDeleted,
+  ]);
 
   return (
     <PlanetContext.Provider
