@@ -5,17 +5,15 @@ function FetchPlanetsApi() {
   const { setListPlanets, setApiData } = useContext(PlanetContext);
   useEffect(() => {
     const fetchPlanets = async () => {
-      const response = await fetch('https://swapi.dev/api/planets');
-      const data = await response.json();
-      const { results } = data;
-      const planetasFiltrados = results.map((planeta) => {
-        const { residents, ...planetData } = planeta;
-        return planetData;
-      });
-      setListPlanets(planetasFiltrados);
-      setApiData(planetasFiltrados);
-
-      return planetasFiltrados;
+      try {
+        const response = await fetch('https://swapi.dev/api/planets');
+        const data = await response.json();
+        const { results } = data;
+        setListPlanets(results);
+        setApiData(results);
+      } catch (error) {
+        console.log(error);
+      }
     };
     fetchPlanets();
   }, [setListPlanets, setApiData]);

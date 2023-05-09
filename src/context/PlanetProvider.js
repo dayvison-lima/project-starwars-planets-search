@@ -29,7 +29,6 @@ function PlanetProvider({ children }) {
         .filter((planeta) => planeta[columnFilter] * 1 > valueFilter);
       setListPlanets(filtrados);
       setFiltros([...filtros, { columnFilter, comparisonFilter, valueFilter }]);
-      console.log(filtros);
       const filteredColumns = columnFilterOptions.filter((col) => col !== columnFilter);
       setColumnFilterOptions(filteredColumns);
       setColumnFilter(filteredColumns[0]);
@@ -38,7 +37,6 @@ function PlanetProvider({ children }) {
         .filter((planeta) => planeta[columnFilter] * 1 < valueFilter);
       setListPlanets(filtrados);
       setFiltros([...filtros, { columnFilter, comparisonFilter, valueFilter }]);
-      console.log(filtros);
       const filteredColumns = columnFilterOptions.filter((col) => col !== columnFilter);
       setColumnFilterOptions(filteredColumns);
       setColumnFilter(filteredColumns[0]);
@@ -47,7 +45,6 @@ function PlanetProvider({ children }) {
         .filter((planeta) => planeta[columnFilter] === valueFilter);
       setListPlanets(filtrados);
       setFiltros([...filtros, { columnFilter, comparisonFilter, valueFilter }]);
-      console.log(filtros);
       const filteredColumns = columnFilterOptions.filter((col) => col !== columnFilter);
       setColumnFilterOptions(filteredColumns);
       setColumnFilter(filteredColumns[0]);

@@ -50,7 +50,7 @@ function Table() {
         <tbody>
           {planetasFiltrados.map((planet) => (
             <tr key={ planet.name }>
-              <td>{planet.name}</td>
+              <td data-testid="planet-name">{planet.name}</td>
               <td>{planet.climate}</td>
               <td>{planet.terrain}</td>
               <td>{planet.population}</td>
